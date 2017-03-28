@@ -130,6 +130,7 @@ def id3(level, remainAttrs, data):
 parser()
 
 
+
 remainAttrs = []
 for a in attributes:
     remainAttrs.append(a[0])
