@@ -27,10 +27,6 @@ def parser():
     global possibleResults
     resultIndex = index - 1
     possibleResults = attributes[resultIndex][1]
-    #print attributes, resultIndex
-    #print data
-    #print possibleResults
-
 
 def attrIndex(attr):
     index = 0
@@ -46,8 +42,6 @@ def getSet(s, attr, value):
     for row in s:
         if row[index] == value:
             newS.append(row)
-    #print "getSet", len(newS)
-    #print newS
     return newS
 
 def entropy2(attr, value, data, initial):
@@ -59,7 +53,6 @@ def entropy2(attr, value, data, initial):
         countRes.append([possibleResults[i], 0])
     if initial:
         for row in data:
-            #print row
             total += 1
             indexRes = possibleResults.index(row[resultIndex])
             countRes[indexRes][1] += 1 
@@ -67,17 +60,14 @@ def entropy2(attr, value, data, initial):
             division = 0
             if total > 0:
                 division = countRes[i][1] / float(total)
-            #print countRes[i][1], division, total
             if  division > 0:
                 entropy -= (division) * math.log(division, 2)
 
     else:
-        #print "here"
         aIndex = attrIndex(attr)
 
         for row in data:
             if row[aIndex] == value:
-         #       print row
                 total += 1
                 indexRes = possibleResults.index(row[resultIndex])
                 countRes[indexRes][1] += 1   
@@ -85,11 +75,9 @@ def entropy2(attr, value, data, initial):
             division = 0
             if total > 0:
                 division = countRes[i][1] / float(total)
-            #print countRes[i][1], division, total
             if  division > 0:
                 entropy -= (division) * math.log(division, 2)
 
-    #print entropy, total
     return entropy, total
 
 
@@ -102,14 +90,12 @@ def attrValues(attr):
 
 
 def gain(s, attr, entropyS):
-
     acum = 0
     denominator = len(s)
     for val in attrValues(attr):
         entr, numerator = entropy2(attr, val, s, False)
         acum += float(numerator) / denominator * entr
     result = entropyS - acum
-    #print "gain",attr, result, s
     return result 
 
 def best(s, remainAttrs):
@@ -117,16 +103,13 @@ def best(s, remainAttrs):
     best = []
     entropyS, tot = entropy2('', '', s, True)
     if entropyS == 0:
-        #print "ANSWER: " + s[0][resultIndex]
         return "ANSWER: " + s[0][resultIndex], 0
-    #print "entropyS",entropyS
 
     for a in remainAttrs:
         gainResult = gain(s, a, entropyS)
         if gainResult > highest:
             highest = gainResult
             best = a
-    #print best
     return best, 1
 
 def id3(level, remainAttrs, data):
@@ -144,38 +127,10 @@ def id3(level, remainAttrs, data):
                 id3(level + 1, remain, s)
 
 
-
-
 parser()
-#s = getSet(data, 'age', 'young')
-#entropy2('tear-prod-rate', 'normal', s, True)
 
-#print resultIndex, attributes[resultIndex]
-#resultColum = getAttrColumn(attributes[resultIndex][0])
-#getAttrColumn(attributes[1][0])
-#print possibleResults
-#entropy('A','TRUE')
-#gain('A','FALSE','B')
-#best('tear-prod-rate','normal',['age','spectacle-prescrip','astigmatism'])
-#print "jadadasd"
-#print attributes
-#best(data,['age','spectacle-prescrip','astigmatism', 'tear-prod-rate'])
-#s = getSet(data, 'tear-prod-rate', 'normal')
-#best(s,['age','spectacle-prescrip','astigmatism'])
-#s2 = getSet(s, 'astigmatism', 'no')
-#best(s2,['age','spectacle-prescrip'])
-#s3 = getSet(s2, 'age', 'young')
-#best(s3,['spectacle-prescrip'])
-#s = getSet(data, 'tear-prod-rate', 'reduced')
-#best(s,['age','spectacle-prescrip','astigmatism'])
-#id3(0,['age','spectacle-prescrip','astigmatism', 'tear-prod-rate'], data)
-#id3(0,['A','B'], data)
 remainAttrs = []
 for a in attributes:
     remainAttrs.append(a[0])
 remainAttrs.pop()
 id3(0,remainAttrs, data)
-
-
-
-#entropy('astigmatism','no')
